@@ -13,16 +13,16 @@ import {
 <template>
    <div class="batman">
 
-      <nav class="extra-nav">
+      <nav class="extra-nav flex flex-col sm:flex-row justify-between px-3 ">
        <RouterLink to="/">
           <House class="icon-home" />
        </RouterLink>
 
        <NavigationMenu>
-         <NavigationMenuList>
+         <NavigationMenuList class="flex flex-col sm:flex-row">
             <NavigationMenuItem>
              <a href="#" @click.prevent="">
-               <NavigationMenuLink :class="navigationMenuTriggerStyle()">
+               <NavigationMenuLink :class="[navigationMenuTriggerStyle(), 'text-md hover:bg-brand-purple hover:text-white transition-colors']">
                   Portada
                </NavigationMenuLink>
              </a>
@@ -30,7 +30,7 @@ import {
 
             <NavigationMenuItem>
              <a href="#" @click.prevent="">
-               <NavigationMenuLink :class="navigationMenuTriggerStyle()">
+               <NavigationMenuLink :class="[navigationMenuTriggerStyle(), 'text-md hover:bg-brand-purple hover:text-white transition-colors']">
                   Vehículos
                </NavigationMenuLink>
              </a>
@@ -38,7 +38,7 @@ import {
 
             <NavigationMenuItem>
              <a href="#" @click.prevent="">
-               <NavigationMenuLink :class="navigationMenuTriggerStyle()">
+               <NavigationMenuLink :class="[navigationMenuTriggerStyle(), 'text-md hover:bg-brand-purple hover:text-white transition-colors']">
                   Contacto
                </NavigationMenuLink>
              </a>
@@ -177,6 +177,15 @@ import {
   max-width: 510px;
   margin: 0 auto; /* margen por arriba y por abajo 0 pero por los lados centrado automáticamente */
   padding: 4rem 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.vehiculis-arca {
+  order: 1;
+  display: flex;
+  flex-direction: column;
+
 }
 
 .vehiculis-titulus {
@@ -184,15 +193,27 @@ import {
   font-size: 2rem;
   background-color: rgba(0, 0, 0, 0.7);
   color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center
 }
 
 .item {
   padding: 1.5rem 0;
-  height: 500px;
+  height: 540px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content:space-around;
+}
+
+.item> img {
+  width: 400px;
 }
 
 .unus {
   background-color: rgba(220, 220, 220, 0.2) ; 
+  order: 2;
 }
 
 .duo {
@@ -201,8 +222,16 @@ import {
 
 .tribus {
   background-color: rgba(220, 220, 220, 0.8);
+  order: 3;
 }
  
+.notitia {
+  width: 90%;
+  display: flex;
+  flex-direction:column;
+  align-items: center
+}
+
 .notitia > small {
   font-weight: bold;
   padding: 1rem;
@@ -214,4 +243,51 @@ import {
  color: rgba(0, 0, 0, 0.7);
  padding-bottom: 1rem;
 } 
+
+@media (min-width: 640px) {
+  #vehiculis {
+    max-width: 576px;
+  }
+}
+
+@media (min-width: 760px) {
+  #vehiculis {
+    max-width: 900px;
+  }
+
+  .item {
+    flex-direction: row;
+    height: 320 px;
+  }
+
+  .notitia {
+    width: 40%
+  }
+
+  .unus> img {
+    order: -1
+  }
+}
+
+@media (min-width: 1024px) {
+  #vehiculis {
+    max-width: 1280px;
+  }
+
+  .item {
+    flex-direction: column;
+    height: 560px;
+  }
+
+  .vehiculis-arca {
+    flex-direction: row;
+  }
+  
+  .notitia {
+    width: 90%
+  }
+
+  
+}
+
 </style>
