@@ -1,96 +1,59 @@
 <script setup lang="ts"> 
-import { House, Menu } from '@lucide/vue';
-import { RouterLink } from 'vue-router';
-import {
-  NavigationMenu,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-  navigationMenuTriggerStyle,
-} from '@/components/ui/navigation-menu'
-import { onMounted, ref } from 'vue';
-import { Toggle } from '@/components/ui/toggle'
 
 import CarrusImaginum from '@/components/CarrusImaginum.vue';
 import { scrollToSection } from '@/utils/scrollToSection';
+import { useMouseMotio } from '@/composables/useMouseMotio';
+import NavigatorPrimarius from '@/components/NavigatorPrimarius.vue';
 
 const photos = ["justice", "arkham", "superman", "varios", "villana", "villano", "grupo", "robin", "anne", "joker", "resplandor", "cat", "gafas", "league", "fondoVerde"]; 
 
-const videreMenu = ref<boolean>(true)
+const { mousePositione, cumMouseMove, cumMouseLeave } = useMouseMotio()
 
-const handleResize = () => {
-  if (window.innerWidth <= 640) {
-    videreMenu.value = false
-  } else {
-    videreMenu.value=true
-  }
-}
-
-onMounted(()=> {
-  handleResize()
-  window.addEventListener('resize', handleResize)
-})
+const menuItems = [
+  {
+    label: 'Portada',
+    href: '#',
+    onClick: () => scrollToSection('#')
+  }, 
+  {
+    label: 'Vehículos',
+    href: '#vehiculis',
+    onClick: () => scrollToSection('#vehiculis')
+  }, 
+  {
+    label: 'Imágenes',
+    href: '#videre',
+    onClick: () => scrollToSection('#videre')
+  }, 
+  {
+    label: 'Contacto',
+    href: '#contactus',
+    onClick: () => scrollToSection('#contactus')
+  }, 
+]
 
 </script>
 
 <template>
    <div class="batman">
 
-      <Toggle
-      class="fixed top-2 right-4 z-50 bg-slate-500 sm:hidden"
-      @click="videreMenu = !videreMenu"
-      >
-        <Menu />
-      </Toggle>
-
-      <nav v-if="videreMenu" class="extra-nav flex flex-col sm:flex-row justify-between px-3 ">
-       <RouterLink to="/">
-          <House class="icon-home" />
-       </RouterLink>
-
-       <NavigationMenu>
-         <NavigationMenuList class="flex flex-col sm:flex-row">
-            <NavigationMenuItem>
-             <a href="#" @click.prevent="scrollToSection('#')"">
-               <NavigationMenuLink :class="[navigationMenuTriggerStyle(), 'text-md hover:bg-brand-purple hover:text-white transition-colors']">
-                  Portada
-               </NavigationMenuLink>
-             </a>
-            </NavigationMenuItem>
-
-            <NavigationMenuItem>
-             <a href="#" @click.prevent="scrollToSection('#vehiculis')">
-               <NavigationMenuLink :class="[navigationMenuTriggerStyle(), 'text-md hover:bg-brand-purple hover:text-white transition-colors']">
-                  Vehículos
-               </NavigationMenuLink>
-             </a>
-            </NavigationMenuItem>
-
-            <NavigationMenuItem>
-             <a href="#videre" @click.prevent="scrollToSection('#videre')">
-               <NavigationMenuLink :class="[navigationMenuTriggerStyle(), 'text-md hover:bg-brand-purple hover:text-white transition-colors']">
-                  Imágenes
-               </NavigationMenuLink>
-             </a>
-            </NavigationMenuItem>
-
-            <NavigationMenuItem>
-             <a href="#contactus" @click.prevent="scrollToSection('#contactus')">
-               <NavigationMenuLink :class="[navigationMenuTriggerStyle(), 'text-md hover:bg-brand-purple hover:text-white transition-colors']">
-                  Contacto
-               </NavigationMenuLink>
-             </a>
-            </NavigationMenuItem>
-
-         </NavigationMenuList>
-       </NavigationMenu>
-        
-      </nav>
-
+    <NavigatorPrimarius :items="menuItems" homeRoute="/" />
 
       <header class="titulus">
          <h1>Batman</h1>
-         <div id="titulus-batman" class="titulus-img"></div>
+
+         <div
+         id="titulus-batman"
+         class="titulus-img" 
+         @mousemove="cumMouseMove"
+         @mouseleave="cumMouseLeave"
+         :style="{
+           backgroundPositionX: `calc(50% + ${mousePositione.x}px)`,
+           backgroundPositionY: `calc(50% + ${mousePositione.y}px)`,
+           transition: 'background-position 0.1s ease-out'
+         }"
+         ></div>
+
          <p>Él puede tomar la decisión que nadie más puede, la decisión correcta.</p>
       </header>
 
@@ -148,42 +111,12 @@ onMounted(()=> {
    font-family:Arial, Helvetica, sans-serif
 }
 
-.icon-home {
-   width: 3rem;
-   height: 3rem;
-   color:slateblue;
-}
-.icon-home:hover {
-   color:white;
-   background-color: slateblue;
-}
-
-.extra-nav {
-  background-color: white;
-  opacity: 0.7;
-  box-shadow: rgba(0, 0, 0, 0.7);
-  position: fixed; /* no sube ni baja con la página, se queda fijo en la ventana */
-  top: 0;
-  width: 11rem;
-  border-radius: 0 0 1rem 0; /* redondea las esquinas, empezando por izq arriba y en sentido horario*/
-  z-index: 1;
-}
-
-@media (min-width: 640px){ /* que cuando es pantalla grande ocupa todo el ancho */
-  .extra-nav {
-    width: 100%;
-    border-radius: 0;
-    opacity: 1;
-    left: 0;
-  }
-}
-
 
 .titulus-img {
   background-size: 100% 100%;
   background-position: center center; /* centrado para que tome de referencia el punto central y no la esquina 0,0 */
   background-image: url("../imagines/batman/batman.jpg"); /* los dos puntos son importantes para cuando se comprima en un archivo css */
-  min-height: 100vh; /* cuanto ocupa de la ventana */
+  aspect-ratio: 8/7;
 }
 
 .titulus-img:hover {
@@ -192,7 +125,7 @@ onMounted(()=> {
 
 .titulus > h1 {
   position: absolute; /* absolute para que no sea relativo al resto de elementos de la página */
-  top: 63%; /* distancia del top de la pagina */
+  top: calc(100vw * 0.5); /* distancia del top de la pagina */
   width: 100%; /* ocupa en 100% de la ventana */
   text-align: center;
   font-size: 5rem; 
@@ -203,7 +136,7 @@ onMounted(()=> {
 
 .titulus > p {
   position: absolute;
-  top: 36%;
+  top: calc(100vw * 0.25);
   width: 100%;
   text-align: center;
   font-size: 2rem;
