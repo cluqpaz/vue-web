@@ -44,12 +44,12 @@ export const router= createRouter({
                 children: [
                     {
                         path: '',
-                        name: "simpsons-characters",
+                        name: 'simpsons-characters',
                         component: Collectione
                     },
                     {
                         path: ':id',
-                        name: "simpsons-characters",
+                        name: 'simpsons-character',
                         component: Character
                     }
                 ]
