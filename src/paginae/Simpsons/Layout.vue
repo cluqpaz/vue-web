@@ -1,6 +1,12 @@
 <script setup lang="ts">
 import LogoSimpsons from '@/components/LogoSimpsons.vue';
+import { Badge } from '@/components/ui/badge';
+import { useFavoritosStore } from '@/stores/useFavoritos';
+import { Heart } from '@lucide/vue';
+import { storeToRefs } from 'pinia';
 
+const favoritosStore = useFavoritosStore()
+const { totalFavoritos } = storeToRefs(favoritosStore)
 
 </script>
 
@@ -13,6 +19,18 @@ import LogoSimpsons from '@/components/LogoSimpsons.vue';
                
                 <div class="flex gap-6 pt-3">
                     <RouterLink
+                        to="/simpsons/favoritos"
+                        active-class="font-bold"
+                        class="relative flex items-center gap-1"
+                    >
+                        <Heart class="w-4 h-4"/>
+                        Favorites
+                        <Badge variant="destructive" class="h-5 w-5 absolute -top-2 -right-2.5">
+                            {{ totalFavoritos }}
+                        </Badge>
+                        
+                    </RouterLink>
+                    <RouterLink
                         to="/simpsons/gallery"
                         active-class="font-bold"
                     >
@@ -24,7 +42,7 @@ import LogoSimpsons from '@/components/LogoSimpsons.vue';
                     >
                         About
                     </RouterLink>
-                    <Button variant="tertiarius" size="elongatis" class="bg-simpsons-red hover:bg-simpsons-yellow focus:bg-simpsons-yellow">
+                    <Button variant="tertiarius" size="elongatis" class="bg-simpsons-red border-2 border-black pr-3 pl-3 hover:bg-simpsons-yellow focus:bg-simpsons-yellow">
                         <RouterLink to="/">Exit</RouterLink>
                     </Button>
                 </div>
