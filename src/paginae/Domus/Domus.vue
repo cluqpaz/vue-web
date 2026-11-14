@@ -1,6 +1,20 @@
 <script setup lang="ts">
 import { Button } from '@/components/ui/button'
 import { RouterLink } from 'vue-router';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog'
+import { Input } from '@/components/ui/input'
+import { ref } from 'vue';
+
+const dialogApertaEst = ref<boolean>(false)
+const quaestio = ref<string>("")
+
 </script>
 
 
@@ -20,9 +34,31 @@ import { RouterLink } from 'vue-router';
         </p>
 
      <div class="scale-z-10">
-        <Button variant="domus" class="mr-2">
-            <RouterLink to="/indecision">Sí o no</RouterLink>
-        </Button>
+        <Dialog
+            :open="dialogApertaEst"
+            @update:open="dialogApertaEst = $event"
+        >
+            <DialogTrigger as-child>
+                <Button variant="domus" class="mr-2">
+                Sí o no
+                </Button>
+            </DialogTrigger>
+            <DialogContent class="sm:max-w-[425px] bg-domus-navy text-white border border-domus-cyan">
+                <DialogHeader>
+                <DialogTitle>Pregúntame</DialogTitle>
+                <DialogDescription class="text-gray-300">
+                    No sigas con tus dudas, yo te responderé SÍ o NO.
+                </DialogDescription>
+                </DialogHeader>
+                <div class="mt-4">
+                  <Input 
+                  placeholder="Escribe aquí tu pregunta..." 
+                  class="bg-domus-navy-input text-white placeholder:text-gray-400" 
+                  v-model="quaestio"
+                  /> 
+                </div>
+            </DialogContent>
+        </Dialog>
 
         <Button variant="domus" class="mr-2">
             <RouterLink to="/batman">Batman</RouterLink>
