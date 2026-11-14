@@ -3,6 +3,10 @@ import { Card, CardContent } from '@/components/ui/card'
 import { computed, ref } from 'vue';
 import { characters } from './data';
 import { useRouter } from 'vue-router';
+import { useFavoritosStore } from '@/stores/useFavoritos';
+import { Heart } from '@lucide/vue';
+
+const  { esFavorito, toggleFavorito } = useFavoritosStore()
 
 const router = useRouter()
 
@@ -31,15 +35,15 @@ const paginaNumeri: number[] = [...Array(totalPaginae)].map((_,i)=> i + 1)
 <template>
     <div class="flex flex-col items-center gap-8 w-full max-w-page my-8 mx-auto">
         <div class="text-center">
-            <h1 class="font-bold text-xl lg:text-5xl mb-5">
+            <h1 class="font-bold text-xl lg:text-5xl mb-3">
                 The Simpsons Quote App
             </h1>
-            <p class="mb-5">Click on the quote of your favorite character</p>
+            <p>Click on the quote of your favorite character</p>
         </div>
 
-        <div class="grid grid-cols-2 md:grid-cols-3 gap-8">
+        <div class="grid grid-cols-2 md:grid-cols-3 gap-y-4 gap-x-8 mx-auto">
             <Card 
-            class="cursor-pointer w-[220px] h-[240px] hover:bg-simpsons-red hover:text-white transition-colors"
+            class="cursor-pointer w-[220px] h-[270px] hover:bg-simpsons-red hover:text-white transition-colors"
             v-for="character in listaSimpsons"
             key="i"
             >
@@ -49,9 +53,24 @@ const paginaNumeri: number[] = [...Array(totalPaginae)].map((_,i)=> i + 1)
                 >
                     <img 
                     :src="`/imagines/simpsons/${character.imago}`"
-                    class="w-48 h-42 object-cover object-top mt-2 bg-simpsons-yellow border border-black rounded-t-md"
+                    class="cursor-pointer w-48 h-42 object-cover object-top bg-simpsons-yellow border border-black rounded-t-md"
                     >
-                    <h2 class="font-medium text-lg">{{ character.nomen }}</h2>
+                    <h2 class="cursor-pointer font-medium text-lg">{{ character.nomen }}</h2>
+
+                    <Button
+                        @click.stop="toggleFavorito(character)"
+                        size="sm"
+                        :class="[
+                            ' border-black transition-all flex items-center p-1.5 rounded-md',
+                            esFavorito(character.id)  
+                                ? 'bg-simpsons-red text-white hover:bg-red-600' 
+                                : 'bg-white text-black hover:bg-simpsons-yellow'
+                        ]"
+                    >
+                        <Heart :class="['w-4 h-4 mr-1', esFavorito(character.id) ? 'fill-current' : '']" />
+                        {{ esFavorito(character.id) ? 'Favorito' : 'Añadir' }}
+                    </Button>
+
                 </CardContent>
             </Card>
         </div>
